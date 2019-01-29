@@ -1,0 +1,7 @@
+A more simplier design would be to present the roll at once, use the computer to evaluate if they have ship, captain or crew.
+Allow the player to view the roll before they roll again.
+If they have a ship, captain and crew they can loot.
+Must have ship before captain. Captain before crew. Crew before loot.
+They can claim loot on the same roll if they dice if the ship, captain and crew are rolled.
+They can select the dice or dice to roll again.
+They only have up to three rolls.
