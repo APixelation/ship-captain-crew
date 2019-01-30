@@ -62,6 +62,11 @@ def find_dice(roll, player_choice) :
     print("That is not one of the dice!")
     return False
 
+# This function will auto loot for you.
+def auto_loot(roll) :
+    score = sum(roll)
+    return score
+
 # Game prompt that also increases the counter.
 def game_prompt(i) :
     i += 1
@@ -69,10 +74,11 @@ def game_prompt(i) :
     return i
 
 # If you have not rolled a pirate ship, then this function will run and end the game.
-def final_roll_notice(i) :
-    if i == 3 :
-        print("You did not roll enough to collect, thanks for playing!")
+def final_roll_notice() :
+    print("You did not roll enough a pirate ship to collect, thanks for playing!")
 
+def gaming_ending(score) :
+    print()
 # This is the overall comprehensive loot selector function
 # It takes your roll 'roll' and current score 'current_score'
 # First it will run the rool through the remove_pirate_ship function
@@ -84,6 +90,7 @@ def select_score(roll, current_score) :
     final_sorted_list = remove_pirate_ship(roll)
     print(f"Loot: {final_sorted_list}")
     player_selection = int(input("> "))
+    print(f"Collecting {player_selection}...")
     score = find_dice(final_sorted_list, player_selection)
     current_score.append(score)
     return current_score
@@ -104,6 +111,7 @@ You must have a Ship, Captain, and Crew before you can collect loot.
 
 You do not have to collect all dice on a roll and choose to roll again.
 By default, you will pick up everything on your last roll."""
+
 
 has_ship = False
 has_captain = False
@@ -138,10 +146,13 @@ while i <= 3 :
             pirate_ship = True
             if i == 3 :
                 print("\nYou rolled a full stack on the final toss. Your loot will be automatically collected.") 
-            
-            print("\nYou rolled a full stack! You may select your loot or re-roll.")
-            loot_or_roll = input("(L/R) :").upper()
-            nDice = 3
+                remove_pirate_ship(pr)
+                score = auto_loot(pr)
+                print(f"Your score was {score}, thanks for playing!")
+            else :
+                print("\nYou rolled a full stack! You may select your loot or re-roll.")
+                loot_or_roll = input("(L/R) :").upper()
+                nDice = 3
 
             if loot_or_roll == "L" :
                 score = select_score(pr, score)
@@ -151,32 +162,53 @@ while i <= 3 :
                 i = game_prompt(i)
 
         elif has_ship == True and has_captain == True and has_crew == False :
-            final_roll_notice(i)
             nDice = 4
-
-            print("\nYou do not have a crew. Please roll again.")
-            i = game_prompt(i)
+            print(f"Number of dice: {nDice}.")
+            if i == 3 :
+                final_roll_notice()
+                i = game_prompt(i)
+            else :
+                print("\nYou do not have a crew. Please roll again.")
+                i = game_prompt(i)
 
         elif has_ship == True and has_captain == False and has_crew == True :
-            final_roll_notice(i)
             nDice = 5
-
-            print("\nYou do not have a captain for the crew. Please roll again.")
-            i = game_prompt(i)
+            print(f"Number of dice: {nDice}.")
+            if i == 3 :
+                final_roll_notice()
+                i = game_prompt(i)
+            else :
+                print("\nYou do not have a captain for the crew. Please roll again.")
+                i = game_prompt(i)
         
         elif has_ship == True and has_captain == False and has_crew == False :
-            final_roll_notice(i)
             nDice = 5
+            print(f"Number of dice: {nDice}.")
+            if i == 3 :
+                final_roll_notice()
+                i = game_prompt(i)
+            else :
+                print("You did not roll a captain or ship. Roll again.")
+                i = game_prompt(i)
 
         elif has_ship == False :
-            print("\nYou do not have a ship to claim a captain or crew. Please roll again.")
-            i = game_prompt(i)
+            if i == 3 :
+                final_roll_notice()
+                i = game_prompt(i)
+            else :
+                print("\nYou do not have a ship to claim a captain or crew. Please roll again.")
+                i = game_prompt(i)
 
     elif pirate_ship == True :
+        print("Roll again.")
+        input(prompt)
         pr = roll(nDice)
         print(f"You rolled: {pr}.")
         if i == 3 :
-            print("\nYou rolled a full stack on the final toss. Your loot will be automatically collected.") 
+            print("\nYou rolled a full stack on the final toss. Your loot will be automatically collected.")
+            remove_pirate_ship(pr)
+            score = auto_loot(pr)
+            print(f"Your score was {score}, thanks for playing!")
             
         loot_or_roll = input("(L/R) :").upper()
         if loot_or_roll == "L" :
